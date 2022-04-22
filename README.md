@@ -1,1 +1,0 @@
-# Pavol-Panisz.github.io
