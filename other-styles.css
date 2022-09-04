@@ -1,0 +1,31 @@
+
+/* used inside the content div */
+
+.fullwidth-block {
+	grid-column: 1 / -1;
+	background: #eee;
+	/* outline: 1px dashed blue; */
+	
+}
+
+.cont-block {
+/* 	outline: 1px dashed blue; */
+	background: #eee;
+	word-wrap: break-word;
+}
+
+.cont-block > img {
+    max-width: 100%;
+    max-height: auto;
+}
+
+.intro-img {
+	float: left;
+	padding-right: 10px;
+}
+
+.intro-text {
+	display: inline;
+	font-size: 2rem;
+	word-wrap: break-word;
+}
