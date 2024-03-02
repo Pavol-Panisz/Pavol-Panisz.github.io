@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>eMLSE.sk</title>
+        <meta charset="UTF-8" lang="sk"> 
+
+        <style>
+            * {
+                font-family: "Helvetica";
+                letter-spacing: 1px;
+            }
+
+            .container {
+                width: min(100%, 1000px); /* TODO MAKE THIS CLAMP THE WIDTH SO THAT THE TEST NEVER CREATES A HORIZONTAL SCROLLBAR */
+                /* padding: 0 12px 0 12px; */
+                margin: auto;
+            }
+            .center {
+                margin: auto;
+            }
+            .center-fit {       /* centers elements whose width would be otherwise 100% despite the content width being not that. */
+                margin: auto;   /* centers it into the middle of its parent.   */
+                width: fit-content; 
+            }
+            .margin-top-100 {
+                margin-top: 100px;
+            }
+            .margin-top-150 {
+                margin-top: 150px;
+            }
+            .margin-top-50 {
+                margin-top: 50px;
+            }
+            .margin-bottom-30 {
+                margin-bottom: 30px;
+            }
+            th {
+                border: 3.5px solid rgb(255, 255, 255);
+                background-color: rgb(171, 196, 255);
+                padding: 5px;
+                border-top-left-radius: 15px;
+            }
+            td {
+                padding: 5px;
+                border: 3.5px solid rgb(255, 255, 255);
+                background-color: antiquewhite;
+            }
+            table {
+                /* border: 1px solid rgb(183, 183, 183); */
+                /* border-radius: 20px; */
+                border-collapse: collapse;
+                /* border: 1px solid grey; */
+                
+            }
+            tr {
+                /* background-color: rgb(210, 210, 210); */
+                
+            }
+            .bottom-left-rounded {
+                border-bottom-left-radius: 15px;
+            }
+            .bottom-right-rounded {
+                border-bottom-right-radius: 15px;
+            }
+            .instruction-row {
+                background-color: rgb(171, 196, 255);
+                border-top-right-radius: 15px;
+            }
+            .column-header {
+                background-color: rgb(204, 219, 253);
+            }
+            .row-header {
+                background-color: rgb(171, 196, 255);
+            }
+            .row-1 {
+                background-color: rgb(226, 234, 252);
+            }
+            .row-2 {
+                background-color: rgb(237, 242, 251);
+            }
+
+            input {
+                width: 20px;
+                height: 20px;
+            }
+            table {
+                margin-top: 100px;
+                width: 100%;
+            }
+            input {
+                font-size: 20px;
+            }
+            .text-area {
+                margin-top: 5px;
+                font-size: 20px;
+                border: 1px solid black;
+                width: 100%;
+                max-height: fit-content;
+                background-color: white;
+                
+                /* so that the blinking cursor is visible */
+                box-sizing: border-box;
+                padding-left: 5px;
+            }
+            .results-grid {
+                display: grid;
+                grid-template-columns:
+                1fr 1fr 1fr;
+                /* grid-template-rows: 100px 100px 100px;  */
+                column-gap: 30px;
+                row-gap: 30px;
+            }
+            .results-card {
+                border: 1px solid rgb(168, 168, 168); text-align: center; align-self: center; padding: 20px 0px;
+            }
+            #results-button {
+                padding: 15px;
+                font-size: 20px;
+            }
+            #save-results-button {
+                padding: 15px;
+                font-size: 20px;
+            }
+
+        </style>
+
+        <script>
+            let motorickaChybaPocet = 0;
+            let fonologickaChybaPocet = 0;
+            let semantickaChybaPocet = 0;
+            let bezOdpovedePocet = 0;
+            let syntaktickaChybaPocet = 0;
+            let pracovnaPamatPocet = 0;
+
+            // let motorikaDisplay = document.getElementById("motorika-display")
+            // let fonologiaDisplay = document.getElementById("fonologia-display")
+            // let semantikaDisplay = document.getElementById("semantika-display")
+            // let syntaxDisplay = document.getElementById("syntax-display")
+            // let pracovnaPamatDisplay = document.getElementById("pracovna-pamat-display")
+            // let bezOdpovedeDisplay = document.getElementById("bez-odpovede-display")
+            // let scoreDisplay = document.getElementById("score-display")
+            // let syndromeDisplay = document.getElementById("syndrome-display")
+
+            function updateResults() 
+            {
+                // this is a placeholder function in case something needs to happen every time a checkbox is checked
+            }
+
+            function motorickaChyba(checkbox, multiplier=1)
+            {
+                if (checkbox.checked) 
+                { 
+                    motorickaChybaPocet = motorickaChybaPocet + multiplier;
+                }
+                else { 
+                    motorickaChybaPocet = motorickaChybaPocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            function fonologickaChyba(checkbox, multiplier=1)
+            {
+                if (checkbox.checked) 
+                { 
+                    fonologickaChybaPocet = fonologickaChybaPocet + multiplier;
+                }
+                else { 
+                    fonologickaChybaPocet = fonologickaChybaPocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            function semantickaChyba(checkbox, multiplier=1) 
+            {
+                if (checkbox.checked) 
+                { 
+                    semantickaChybaPocet = semantickaChybaPocet + multiplier;
+                }
+                else { 
+                    semantickaChybaPocet = semantickaChybaPocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            function bezOdpovede(checkbox, multiplier=1) 
+            {
+                if (checkbox.checked) 
+                { 
+                    bezOdpovedePocet = bezOdpovedePocet + multiplier;
+                }
+                else { 
+                    bezOdpovedePocet = bezOdpovedePocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            function syntaktickaChyba(checkbox, multiplier=1)
+            {
+                if (checkbox.checked) 
+                { 
+                    syntaktickaChybaPocet = syntaktickaChybaPocet + multiplier;
+                }
+                else { 
+                    syntaktickaChybaPocet = syntaktickaChybaPocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            function pracovnaPamat(checkbox, multiplier=1)
+            {
+                if (checkbox.checked) 
+                { 
+                    pracovnaPamatPocet = pracovnaPamatPocet + multiplier;
+                }
+                else { 
+                    pracovnaPamatPocet = pracovnaPamatPocet - multiplier; 
+                }
+
+                console.log("motoricka: " + motorickaChybaPocet + " | fonologicka: " + fonologickaChybaPocet + 
+                            "\nsemanticka: " + semantickaChybaPocet + " | bezOdpovede: " + bezOdpovedePocet +
+                            "\nsyntakticka: " + syntaktickaChybaPocet + " | pracovnaPamat: " + pracovnaPamatPocet
+                            );
+                updateResults();
+            }
+
+            // function that generates the most common header
+            function generateBasicHeader(subtestName, instruction, forAdmin, columnNames)
+            {
+                document.write(
+                    `\
+                    <tr>\
+                    <th rowspan=\"2\">${subtestName}</th>\
+                    <td class=\"instruction-row\" colspan=\"${columnNames.length}\">\
+                    Inštrukcia: ${instruction}\
+                    <br><br>\
+                    Pre administrátora: ${forAdmin}\
+                    </td>\
+                    </tr>\
+                    <tr>\
+                    `
+                );
+
+                for (let i = 0; i < columnNames.length; i++)
+                {
+                    document.write(`<td class=\"column-header\">${columnNames[i]}</td>`);
+                }
+
+                document.write("</tr>");
+            }
+
+            // function that generates the checkboxes
+            function generateCheckboxes(
+                rowNames,
+                colCount,
+                pointColumns,
+                pointFunctions,
+                specialColumnIndex=null,
+                specialWrite=null,
+                firstRowUnscored=false)  
+            {
+                for (let rIndex = 0; rIndex < rowNames.length; rIndex++)
+                {
+                    let curPointFuncIndex = 0;
+
+                    // styles the row (more specifically, applies the rowClass to every td in the currently generated row,
+                    // except for the very first column, since that column uses the class "row-header")
+                    let rowClass = rIndex % 2 == 0 ? "row-1" : "row-2" 
+
+                    // start new row
+                    document.write("<tr>\n");
+
+                    // write the row name and round it if its in the last row
+                    if (rIndex == rowNames.length - 1) {
+                        document.write(`\t<td class=\"row-header bottom-left-rounded\">${rowNames[rIndex]}</td>\n`);    
+                    }
+                    else {
+                        document.write(`\t<td class=\"row-header\">${rowNames[rIndex]}</td>\n`);
+                    }
+
+                    // if the 1st row is unscored, dont generate any checkboxes
+                    if (rIndex == 0 && firstRowUnscored) 
+                    {
+                        document.write(`<td class=\"${rowClass}\" colspan=\"${colCount}\" style=\"text-align: center;\">Zácvik - nehodnotiť</td>`);
+                        continue;
+                    }
+
+                    // generate checboxes and/or the special row
+                    for (let cIndex = 0; cIndex < colCount; cIndex++) 
+                    {
+                        // if we need a special column (for example in subtest 3 where the last column isnt checkboxes but text fields)
+                        if (specialColumnIndex != null && cIndex == specialColumnIndex)
+                        {
+                            document.write(eval(specialWrite)); 
+                            continue;
+                        }
+
+                        // normal checkbox column
+                        let onClick = "";
+                        if (pointColumns.includes(cIndex)) 
+                        {
+                            let multiplier = "1";
+                            let funcStr = pointFunctions[curPointFuncIndex];
+                            let lastChar = funcStr[funcStr.length - 1];
+
+                            // find out whether we have a mutliplier appended to the end of the function name and handle it
+                            let digits = ["0","1","2","3","4","5","6","7","8","9"]; // all possible multiplier values
+                            if (digits.includes(lastChar)) 
+                            {
+                                multiplier = lastChar;
+                                funcStr = funcStr.slice(0, -1); // remove the last char (the digit)
+                            }
+
+                            onClick = "onclick=\"" + funcStr + `(this, ${multiplier})\"`;
+                            curPointFuncIndex++;
+                        }
+
+                        // write the checkbox and round its td if this is the very last td being printed
+                        if (rIndex == rowNames.length - 1 && cIndex == colCount - 1) {
+                            document.write(`\t<td class=\"${rowClass} bottom-right-rounded\"><input type=\"checkbox\" ${onClick}></td>`);
+                        }
+                        else {
+                            document.write(`\t<td class=\"${rowClass}\"><input type=\"checkbox\" ${onClick}></td>`);
+                        }
+                    }
+
+                    document.write("</tr>\n");
+
+                }
+            }
+        
+            function generateBasicSubtest(subtestName, instruction, forAdmin, columnNames, rowNames, colCount, pointColumns, pointFunctions, firstRowUnscored=false) 
+            {
+                document.write("<table>");
+
+                generateBasicHeader(subtestName, instruction, forAdmin, columnNames);
+                generateCheckboxes(rowNames, colCount, pointColumns, pointFunctions, null, null, firstRowUnscored);
+
+                document.write("</table>");
+            }
+
+            function displayResults(button)
+            {
+                // change the text of the button to reflect the fact that you can use it repeadetly to re-calculate the result
+
+                button.innerHTML = "Znova Vyhodnotiť"
+
+                motorikaDisplay.innerHTML = `${motorickaChybaPocet}/30`
+                fonologiaDisplay.innerHTML = `${fonologickaChybaPocet}/30`
+                semantikaDisplay.innerHTML = `${semantickaChybaPocet}/20`
+                syntaxDisplay.innerHTML = `${syntaktickaChybaPocet}/10`
+                pracovnaPamatDisplay.innerHTML = `${pracovnaPamatPocet}/10`
+                bezOdpovedeDisplay.innerHTML = `${bezOdpovedePocet}/30`
+                
+                // calculate the mlse score
+                score = 100 - (
+                                motorickaChybaPocet + 
+                                fonologickaChybaPocet + 
+                                semantickaChybaPocet + 
+                                syntaktickaChybaPocet + 
+                                pracovnaPamatPocet)
+                // if there were non-responses, the score is calculated the same as if there were responses, but
+                // afterwards we subtract bezOdpovedePocet
+                if (bezOdpovedePocet > 0)
+                {
+                    score = score - bezOdpovedePocet
+                }
+                scoreDisplay.innerHTML = score
+
+                // calculate the syndrome
+                let syndrome;
+                if (syntaktickaChybaPocet < 9) { 
+                    if (pracovnaPamatPocet < 8) {
+                        if (motorickaChybaPocet < 25) {
+                            syndrome = "nfvPPA"
+                        }
+                        else {
+                            if (syntaktickaChybaPocet < 6) {
+                                syndrome = "lvPPA"
+                            }
+                            else {
+                                if (semantickaChybaPocet < 13) {
+                                    syndrome = "svPPA"
+                                }
+                                else {
+                                    syndrome = "lvPPA"
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if (semantickaChybaPocet < 13) {
+                            if (fonologickaChybaPocet < 18) {
+                                syndrome = "nfvPPA"
+                            }
+                            else {
+                                syndrome = "svPPA"
+                            }
+                        }
+                        else {
+                            syndrome = "nfvPPA"
+                        }
+                    }
+                }
+                else {
+                    if (semantickaChybaPocet < 16) {
+                        syndrome = "svPPA"
+                    }
+                    else {
+                        syndrome = "zdravý"
+                    }
+                }
+                syndromeDisplay.innerHTML = syndrome;
+
+                // un-disable the "save results" button
+                document.getElementById("save-results-button").disabled = false;
+
+            }
+
+            function saveResults()
+            {
+                alert("Zatiaľ nefunguje ukladanie výsledkov");
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <div class="container center margin-top-100">
+            <h1 class="center-fit">MLSE Záznamový Hárok</h1>
+
+            <script>
+                // subtest 1
+                generateBasicSubtest(
+                    "1. Pomenovanie<br>obrázkov",
+                    "„ Pozrite si tento obrázok a povedzte čo to je!“",
+                    "Zaznačte „X“ alebo zapíšte doslovne inú odpoveď.",
+                    ["Správne bez chýb", "iná odpoveď", "zdeformovaná odpoveď", "fonologická chyba", "zlyhanie po nápovedi<br>(1. slabika)", "vizuálne zlyhanie"],
+                    ["veverička", "lievik", "žirafa", "ananás", "opasok", "gitara"],
+                    6,
+                    [2, 3, 4],
+                    ["motorickaChyba", "fonologickaChyba", "semantickaChyba"]
+                );
+
+                // subtest 2
+                generateBasicSubtest(
+                    "2. Opakovanie slabík",
+                    "„Opakujte po mne to čo poviem!“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "zdeformovaná odpoveď", "fonologická chyba", "bez odpovede"],
+                    ["HA", "PA", "TA", "KA", "KATASTRÓFA", "KATASTRÓFA,<br> KATASTRÓFA,<br> KATASTRÓFA"],
+                    4,
+                    [1, 2, 3],
+                    ["motorickaChyba", "fonologickaChyba", "bezOdpovede2"],
+                    true
+                );
+            </script>
+
+            <!-- subtest 3 -->
+            <!-- we're making the header of the table manually, since it's not standard -->
+            <table>
+                <tr>
+                    <th rowspan="2">3. Opakovanie<br>a porozumenie slov</th>
+                
+                    <td class="instruction-row" colspan="6">
+                        Inštrukcia: Predtým ako ukážete šesticu obrázkov povedzte:  Zopakujte po mne slovo dalmatínec!<br>
+                        Potom ukážte obrázok a povedzte: Ukážte, ktorý to je! Ak slovo nezopakuje správne, zopakujte ho ešte raz a ukážte na správny obrázok. Postupujte rovnako pri všetkých položkách tohto subtestu.
+                        
+                        <br><br>
+                        Pre administrátora: zaznačte X alebo zapíšte doslovne odpoveď, potom zapíšte, ktorý obrázok ukázal (1-6).
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column-header" colspan="4">Opakovanie slov</td>
+                    <td class="column-header" colspan="2">Porozumenie slov</td>
+                </tr>
+                <tr>
+                    <td class="row-header"></td>
+                    <td class="column-header">Správne bez chýb</td>
+                    <td class="column-header">zdeformovaná odpoveď</td>
+                    <td class="column-header">fonologická chyba</td>
+                    <td class="column-header">bez odpovede</td>
+                    <td class="column-header">Správne bez chýb</td>
+                    <td class="column-header" colspan="2">nesprávne - ktorý (1-6)</td>
+                </tr>
+                <script>
+
+                    // in hindsight, I should not have given generateCheckboxes the option for a custom column.
+                    // we only use it in this subtest (subtest 3) and its a pain anyway as you can see:
+                    // for example, we need to apply the rowClass and also determine whether to round the final row's td.
+                    // that is achieved vy eval() inside of generateCheckboxes. this code is a mess:
+                    // (but at least I learned about eval, super useful) 
+                    generateCheckboxes(
+                        ["dalmatinec", "fonendoskop", "skrutkovač"], 
+                        6, 
+                        [1, 2, 3], 
+                        ["motorickaChyba", "fonologickaChyba", "bezOdpovede2"],
+                        5,
+                        "'<td class=\"' + rowClass + (rIndex == 2 ? \" bottom-right-rounded\" : \"\" ) +'\" style=\"width: 100px;\">\
+                            <input type=\"checkbox\" onclick=\"semantickaChyba(this)\">\
+                            <span style=\"display: inline-block; width: 60px;\" class=\"text-area\" contenteditable=\"true\"></span>\
+                        </td>'");
+                </script>
+                
+            </table>
+
+            <script>
+                generateBasicSubtest(
+                    "4. Opakovanie pseudoslov",
+                    "„Opakujte slová, ktoré Vám poviem. Toto nie sú reálne slová, sú to len vymyslené slová!“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "iná odpoveď", "zdeformovaná odpoveď", "fonologická chyba", "bez odpovede"],
+                    ["frapák", "šervančík", "brázdenčina"],
+                    5,
+                    [2, 3, 4],
+                    ["motorickaChyba", "fonologickaChyba", "bezOdpovede2"]
+                );
+
+                generateBasicSubtest(
+                    "5. Sémantické asociácie",
+                    "„Pozrite si tieto obrázky. Ktorý z týchto dvoch (ukážte dva dolné obrázky) súvisí viac s týmto (ukážte horný obrázok)!“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "Nesprávne/bez odpovede/nerozumie"],
+                    ["náprstok - ihla", "húsenica - motýľ", "zápalky - sviečka", "mrkva - zajac"],
+                    2,
+                    [1],
+                    ["semantickaChyba"]
+                );
+
+                generateBasicSubtest(
+                    "6. Porozumenie viet I.",
+                    "„Ukážte obrázok so štyrmi siluetami (žena, muž, tiger, lev). Prečítam vám niekoľko viet. Po každej vám položím otázku, prosím odpovedzte nahlas, jedným slovom.<br><br>• Poznámka: pri zácviku zakryte hornú časť obrázku (žena a muž), pri zvyšku úloh zakryte dolnú časť obrázku (tiger a lev).",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "Nesprávne/bez odpovede/"],
+                    ["Lev zožral tigra. Kto prežil? (LEV)", "Jozef bol okradnutý Annou. Kto bol zlodej? (ANNA)", "Peter bol zbitý Katkou. Kto bol zranený? (PETER)", "Gustáv beží pomalšie ako Eva. Kto prehrá preteky? (GUSTÁV)", "Žena, s ktorou muž hovoril, bola vysoká. Kto bol vysoký? (ŽENA)"],
+                    2,
+                    [1],
+                    ["syntaktickaChyba"],
+                    true
+                );
+
+                generateBasicSubtest(
+                    "7. Porozumenie viet II.",
+                    "(Ukážte prvú štvoricu obrázkov.) „Ukážem vám štyri obrázky. Potom vám  poviem jednu vetu a vy mi  ukážte, ktorý obrázok k tejto vete patrí.“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "Nesprávne/bez odpovede/"],
+                    ["Chlapec a pes sú nasledovaní dievčaťom.<br>(Obrázok č. 3)", "Dievča, ktoré má so sebou psa, nasleduje chlapca.<br>(Obrázok č. 4)", "Žena, ktorá drží za ruku dieťa, tlačí muža.<br>(Obrázok č. 2)", "Len muž, ktorý drží za ruku dieťa, je tlačený ženou.<br>(Obrázok č. 1)"],
+                    2,
+                    [1],
+                    ["syntaktickaChyba"]
+                );
+
+                generateBasicSubtest(
+                    "8. Hlasité čítanie slov",
+                    "„Prečítajte nahlas tieto slová!“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "iná odpoveď", "zdeformovaná odpoveď", "fonologická chyba", "grafémovo-fonémové čítanie", "bez odpovede"],
+                    ["hanba", "vták", "rozkaz", "dcéra", "ľudský"],
+                    6,
+                    [2, 3, 4, 5],
+                    ["motorickaChyba", "fonologickaChyba", "semantickaChyba", "bezOdpovede2"]
+                );
+
+                generateBasicSubtest(
+                    "9. Hlasité čítanie pseudoslov",
+                    "„Teraz vám ukážem vymyslené slová. Prečítajte ich nahlas presne tak, ako sú napísané!“",
+                    "Zaznačte „✔“ podľa odpovede.",
+                    ["Správne bez chýb", "iná odpoveď", "zdeformovaná odpoveď", "fonologická chyba", "bez odpovede"],
+                    ["dalík", "drunko", "palieník", "merčovina", "napoliturky"],
+                    5,
+                    [2, 3, 4],
+                    ["motorickaChyba", "fonologickaChyba", "bezOdpovede2"]
+                );
+            </script>
+
+            <!-- subtest 10 -->
+            <table>
+                <script>
+                    generateBasicHeader(
+                        "10. Opakovanie viet",
+                        "Budem vám hovoriť vety. Prosím, zopakujte ich presne tak, ako som ich povedal(a) ja",
+                        "zaznačte X ak bola veta zopakovaná  presne, resp. zapíšte doslovne inú odpoveď (vynechané, zmenené slovo, fonologické zámeny a i.)",
+                        ["Správne bez chýb", "zdeformovaná odpoveď", "fonologická chyba", "2 a viac slov nesprávne / vynechaných", "bez odpovede"],
+                        );
+                </script>
+                <tr>
+                    <td class="row-header">1. Vlak včera jazdil po nových koľajniciach.</td>
+                    <td class="row-1"  colspan="6" style="text-align: center;">Zácvik - nehodnotiť</td>
+                </tr>
+                <tr>
+                    <td class="row-header">2. Muž bol hladný, preto nezjedol večeru.</td>
+                    <td class="row-2"><input type="checkbox"></td>
+                    <td class="row-2"><input type="checkbox" onclick="motorickaChyba(this)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="fonologickaChyba(this)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="pracovnaPamat(this, 4)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="bezOdpovede(this, 6)"></td>
+                </tr>
+                <tr>
+                    <td class="row-header">3. Keď pes uvidel zajaca, rozbehol sa za ním na pole.</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="motorickaChyba(this)"></td>
+                    <td class="row-1"><input type="checkbox" onclick="fonologickaChyba(this)"></td>
+                    <td class="row-1"><input type="checkbox" onclick="pracovnaPamat(this, 3)"></td>
+                    <td class="row-1"><input type="checkbox" onclick="bezOdpovede(this, 5)"></td>
+                </tr>
+                <tr>
+                    <td class="row-header">4. Po vstupe do tmavej miestnosti sme hneď začali hľadať vypínač.</td>
+                    <td class="row-2"><input type="checkbox"></td>
+                    <td class="row-2"><input type="checkbox" onclick="motorickaChyba(this)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="fonologickaChyba(this)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="pracovnaPamat(this, 2)"></td>
+                    <td class="row-2"><input type="checkbox" onclick="bezOdpovede(this, 4)"></td>
+                </tr>
+                <tr>
+                    <td class="row-header bottom-left-rounded">5. Do ich novej drevenej chaty sa po pol roku vlámali zlodeji.</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="motorickaChyba(this)"></td>
+                    <td class="row-1"><input type="checkbox" onclick="fonologickaChyba(this)"></td>
+                    <td class="row-1"><input type="checkbox" onclick="pracovnaPamat(this, 1)"></td>
+                    <td class="row-1 bottom-right-rounded"><input type="checkbox" onclick="bezOdpovede(this, 3)"></td>
+                </tr>
+            </table>
+
+            <!-- subtest 11 -->
+            <table>
+                <tr>
+                    <th rowspan="2">11. Písanie</th>
+                    <td class="instruction-row" colspan="3">
+                        Inštrukcia: „Pozorne sa pozrite na tento obrázok a nahlas popíšte, čo sa deje. 
+                        Skúste použiť celé vety. Po minúte vás zastavím. Ste pripravená/ý? Môžete začať, teraz.“
+                        <br><br>
+                        Pre administrátora: zaznačte „X“ do príslušnej časti.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column-header">Správne bez chýb</td>
+                    <td class="column-header">gramatické chyby</td>
+                    <td class="column-header bottom-right-rounded" rowspan="2" style="height: max-content; width: 400px; box-sizing: border-box; padding-bottom: 10px;">
+                        <span style="width: max-content;">
+                            Komentáre
+                            <br>
+                            (voliteľné):
+                        </span>
+                        <div class="text-area" contenteditable="true" style="min-height: 70px;">
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-header bottom-left-rounded">Čistenie zubov</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="syntaktickaChyba(this)"></td>
+                </tr>
+            </table>
+
+            <!-- subtest 12 -->
+            <table>
+                <tr>
+                    <th rowspan="2">12. Opis obrázku </th>
+                    <td class="instruction-row" colspan="5">
+                        Inštrukcia:  „Pozorne sa pozrite na tento obrázok a nahlas popíšte, 
+                        čo sa deje. Skúste použiť celé vety. Po minúte vás zastavím. 
+                        Ste pripravená/ý? Môžete začať, teraz.“
+                        <br><br>
+                        Pre administrátora: zaznačte „X“ do príslušnej časti.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column-header">v norme</td>
+                    <td class="column-header">chyby</td>
+                    <td class="column-header"> </td>
+                    <td class="column-header">Komentáre<br>(voliteľné):</td>
+                    
+                    <!-- set this column to be very thin -->
+                    <td class="column-header" style="width: 50px;">bez<br>odpovede</td>
+                </tr>
+                <tr>
+                    <td class="row-header">slovná zásoba (I.)</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="semantickaChyba(this)"></td>
+                    <td class="row-1">(najmä ukazovacie zámená,<br> všeobecné termíny)</td>
+                    
+                    <!-- sets the column containing the individual text boxes to be 300px wide -->
+                    <td class="row-1" style="width: 300px"><div class="text-area" contenteditable="true"></td>
+                    
+                    <!-- the single "bez odpovede" checkbox-->
+                    <td class="row-1 bottom-right-rounded" rowspan="5"><input type="checkbox" style="margin: 30px;" onclick="bezOdpovede(this, 5)"></td>
+                </tr>
+                <tr>
+                    <td class="row-header">slovná zásoba (II.)</td>
+                    <td class="row-2"><input type="checkbox"></td>
+                    <td class="row-2"><input type="checkbox" onclick="semantickaChyba(this)"></td>
+                    <td class="row-2">(anomické pauzy)</td>
+                    <td class="row-2"><div class="text-area" contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td class="row-header">gramatika</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="syntaktickaChyba(this)"></td>
+                    <td class="row-1">(narušená, najmä<br>vymenovávanie)</td>
+                    <td class="row-1"><div class="text-area" contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td class="row-header">slovná produkcia </td>
+                    <td class="row-2"><input type="checkbox"></td>
+                    <td class="row-2"><input type="checkbox" onclick="fonologickaChyba(this)"></td>
+                    <td class="row-2">(fonologické chyby)</td>
+                    <td class="row-2"><div class="text-area" contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td class="row-header bottom-left-rounded">fluencia</td>
+                    <td class="row-1"><input type="checkbox"></td>
+                    <td class="row-1"><input type="checkbox" onclick="syntaktickaChyba(this)"></td>
+                    <td class="row-1">(zdeformované slová,<br>neplynulosti, neistota)</td>
+                    <td class="row-1"><div class="text-area" contenteditable="true"></td>
+                </tr>
+            </table>
+
+            <!-- display of the result -->
+            <div class="margin-top-100" style="width: 100%;">
+                <h2 class="center-fit">Výsledky</h2>
+                <div class="center-fit margin-top-50">
+                    <button id="results-button" onclick="displayResults(this)">Vyhodnotiť</button>
+                </div>
+
+                <div class="results-grid margin-top-50">
+                    <div class="results-card">Motorika<br><br><span id="motorika-display">?/30</span></div>
+                    <div class="results-card">Fonológia<br><br><span id="fonologia-display">?/30</span></div>
+                    <div class="results-card">Sémantika<br><br><span id="semantika-display">?/20</span></div>
+                    <div class="results-card">Syntax<br><br><span id="syntax-display">?/10</span></div>
+                    <div class="results-card">Pracovná Pamäť<br><br><span id="pracovna-pamat-display">?/10</span></div>
+                    <div class="results-card">Bez Odpovede<br><br><span id="bez-odpovede-display">?/66</span></div>
+
+                    <div class="results-card">MLSE skóre: <span id="score-display"></span></div>
+                    <div class="results-card">Syndróm: <span id="syndrome-display"></span></div>
+
+                    <div class="center-fit">
+                        <button id="save-results-button" onclick="saveResults()" disabled>
+                            Uložiť Výsledky
+                    </button></div>
+
+                </div>
+            </div>
+
+            <footer class="margin-top-150">
+                © Tomáš Benko, 2024
+            </footer>
+
+            <!-- summary -->
+            <!-- <div class="margin-top-100">
+                ak neurobil ani jeden non response:
+                    
+                    skóre jednotlivých domén:
+
+                    Motorika: 30-pocetMotorSpeechChyb
+                    Fonológia: 30-foneticke
+                    Sémantika: 20-semanticke
+                    Syntax: 10-syntax
+                    Pracovná Pamäť: 10 - pracovnaPamat
+
+                    totálne skóre (MLSE skóre):
+
+                    100 - (motorickaChybaPocet + fonologickaChybaPocet + semantickaChybaPocet + syntaktickaChybaPocet + pracovnaPamatPocet)
+
+                ak urobil aspoň 1 non response
+                    
+                    100 - (motorickaChybaPocet + fonologickaChybaPocet + semantickaChybaPocet + syntaktickaChybaPocet + pracovnaPamatPocet) - bezOdpovedePocet
+
+            </div> -->
+
+        </div>
+
+        <!-- POST PAGE RENDER STUFF, such as getting elements by their ID -->
+        <!-- it also unchecks all checkboxes when the page loads / reloads. -->
+        <!-- it has to be at the very end of the document, after all checkboxes have been rendered. -->
+        <script>
+
+            // get all display objects used in the results display grid
+            let motorikaDisplay = document.getElementById("motorika-display")
+            let fonologiaDisplay = document.getElementById("fonologia-display")
+            let semantikaDisplay = document.getElementById("semantika-display")
+            let syntaxDisplay = document.getElementById("syntax-display")
+            let pracovnaPamatDisplay = document.getElementById("pracovna-pamat-display")
+            let bezOdpovedeDisplay = document.getElementById("bez-odpovede-display")
+            let scoreDisplay = document.getElementById("score-display")
+            let syndromeDisplay = document.getElementById("syndrome-display")
+
+            // uncheck all checkboxes (all variables are reset to 0 on page load, so we dont need to reset those too)
+            const inputs = document.getElementsByTagName("input");
+            for (let i = 0; i < inputs.length; i++) 
+            {
+                if (inputs[i].type == "checkbox") inputs[i].checked = false;
+            }
+
+            // disable the save results button - its gonna get un-disabled once the user clicks on "calculate results"
+            document.getElementById("save-results-button").disabled = true;
+        </script>
+
+    </body>
+
+</html>
