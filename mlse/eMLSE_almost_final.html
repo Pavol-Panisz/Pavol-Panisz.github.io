@@ -3,6 +3,7 @@
     <head>
         <title>eMLSE.sk</title>
         <meta charset="UTF-8" lang="sk"> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" onerror="scriptImportError()"></script>
 
         <style>
             * {
@@ -125,12 +126,15 @@
         </style>
 
         <script>
-            let motorickaChybaPocet = 0;
-            let fonologickaChybaPocet = 0;
-            let semantickaChybaPocet = 0;
-            let bezOdpovedePocet = 0;
-            let syntaktickaChybaPocet = 0;
-            let pracovnaPamatPocet = 0;
+            let motorickaChybaPocet = 0
+            let fonologickaChybaPocet = 0
+            let semantickaChybaPocet = 0
+            let bezOdpovedePocet = 0
+            let syntaktickaChybaPocet = 0
+            let pracovnaPamatPocet = 0
+
+            // set to false if an error occurs during the html2pdf library importing
+            let pdfScriptImported = true
 
             // let motorikaDisplay = document.getElementById("motorika-display")
             // let fonologiaDisplay = document.getElementById("fonologia-display")
@@ -140,6 +144,12 @@
             // let bezOdpovedeDisplay = document.getElementById("bez-odpovede-display")
             // let scoreDisplay = document.getElementById("score-display")
             // let syndromeDisplay = document.getElementById("syndrome-display")
+
+            function scriptImportError()
+            {
+                pdfScriptImported = false
+                alert("Ukladanie výsledkov ako pdf súbor nebude fungovať.\n\nMožno nie je pripojenie na internet alebo odkaz na knižnicu je nefunkčný")
+            }
 
             function updateResults() 
             {
@@ -443,13 +453,20 @@
 
             function saveResults()
             {
-                alert("Zatiaľ nefunguje ukladanie výsledkov");
+                if (!pdfScriptImported)
+                {
+                    alert("Nefunguje ukladanie výsledkov ako pdf súbor")
+                    return
+                } 
+
+                let body = document.getElementById("body")
+                html2pdf().from(body).save()
             }
 
         </script>
 
     </head>
-    <body>
+    <body id="body">
         <div class="container center margin-top-100">
             <h1 class="center-fit">MLSE Záznamový Hárok</h1>
 
